@@ -3,14 +3,12 @@ package com.example.authorizationserver.web.controller;
 import com.example.authorizationserver.service.ResourceOwnerService;
 import com.example.authorizationserver.service.user.Client;
 import com.example.authorizationserver.web.filter.ClientAuthenticationRequired;
-import com.example.authorizationserver.web.principal.ClientPrincipal;
 import com.example.authorizationserver.service.user.ResourceOwner;
 import com.example.authorizationserver.service.AccessTokenService;
 import com.example.authorizationserver.web.holder.AuthorizationCodeHolder;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
-import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -51,9 +49,8 @@ public class TokenController {
         try {
             logger.info("アクセストークン発行開始");
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(httpServletRequest);
-            OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
 
-            // 認可コードの正当性のチェック
+            // 認可コードを取得
             String authCode = oauthRequest.getCode();
             logger.info("認可コード = {}", authCode);
 
@@ -63,13 +60,19 @@ public class TokenController {
                 throw OAuthProblemException.error("access_denied");
             }
 
-            // 認可コードが正当ならばリソースオーナーとクライアントを取得し、認可コードを削除
+            // リソースオーナーとクライアントを取得
             ResourceOwner resourceOwner = authorizationCodeHolder.getResourceOwner(authCode);
             Client client = authorizationCodeHolder.getClient(authCode);
+
+            // redirect_uriの正当性をチェック
+            validateRedirectionURI(oauthRequest, client);
+
+            // 認可コードを削除
             resourceOwner.setClient(client);
             authorizationCodeHolder.remove(authCode);
 
             // アクセストークンとリフレッシュトークン発行
+            OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
             String accessToken = oAuthIssuer.accessToken();
             String refreshToken = oAuthIssuer.refreshToken();
 
@@ -106,10 +109,9 @@ public class TokenController {
     /**
      * redirect_uriが登録されたものかどうかをチェックする。
      */
-    private void validateRedirectionURI(OAuthAuthzRequest oAuthRequest) throws OAuthProblemException {
+    private void validateRedirectionURI(OAuthTokenRequest oAuthRequest, Client client) throws OAuthProblemException {
         String redirectURI = oAuthRequest.getRedirectURI();
-        ClientPrincipal clientPrincipal = (ClientPrincipal) securityContext.getUserPrincipal();
-        if (!clientPrincipal.getRedirectUri().equals(redirectURI)) {
+        if (!client.getRedirectUri().equals(redirectURI)) {
             logger.error("redirect_uriが違います : {}", redirectURI);
             throw OAuthProblemException.error("unauthorized_client");
         }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -41,7 +42,10 @@ public class ResourceServerBasicAuthenticationFilter implements ContainerRequest
                 resourceServerId, resourceServerPassword);
 
         ResourceServer resourceServer = resourceServerService.getResourceServer(resourceServerId, resourceServerPassword);
-
+        if (resourceServer == null) {
+            logger.error("リソースサーバーのIDまたはパスワードが正しくありません");
+            throw new NotAuthorizedException("Basic realm=AUTHZ_SERVER");
+        }
         logger.info("リソースサーバーのBASIC認証が成功しました");
     }
 }
