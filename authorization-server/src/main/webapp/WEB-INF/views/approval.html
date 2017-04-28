@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>認可サーバーの認可画面</title>
+    <link rel="stylesheet" href="../../resources/css/style.css"
+          th:href="@{${mvc.contextPath}+'/resources/css/style.css'}">
+</head>
+<body>
+<h1>認可サーバーの認可画面</h1>
+<p>クライアント<span th:text="${client.clientId}">dummyclient</span>が、下記のスコープで認可を求めています。</p>
+<ul>
+    <li th:each="scope : ${client.scopeTypes}" th:text="${scope}">scope1</li>
+    <!--/*-->
+    <li>scope2</li>
+    <!--*/-->
+</ul>
+<p>よろしければ、ログインIDとパスワードを入力して「認可」してください</p>
+<form method="post" th:action="@{${mvc.basePath}+'/approval'}">
+    ログインID：<input type="text" name="loginId"><br>
+    パスワード：<input type="password" name="password"><br>
+    <input type="hidden" name="client_id" th:value="${client.clientId}">
+    <input type="submit" value="認可する">
+</form>
+</body>
+</html>

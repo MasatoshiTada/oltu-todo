@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>一覧画面</title>
+    <link rel="stylesheet" href="../../resources/css/style.css"
+          th:href="@{${mvc.contextPath}+'/resources/css/style.css'}">
+</head>
+<body>
+<h1>TODO一覧（READ CLIENT）</h1>
+<form action="index.html" th:action="@{${mvc.basePath}+'/todo/add'}" method="post">
+    TODO：<input type="text" name="text"><br>
+    締切：<input type="date" name="deadline"><br>
+    <input type="submit" value="登録">
+</form>
+<table border="1">
+    <tr>
+        <th>UUID</th>
+        <th>ユーザー名</th>
+        <th>内容</th>
+        <th>作成日時</th>
+        <th>締切</th>
+        <th>完了済み</th>
+    </tr>
+    <tr th:each="todo : ${todoList}" th:object="${todo}">
+        <td th:text="*{uuid}">aaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="*{username}">username</td>
+        <td th:text="*{text}">書類を作る</td>
+        <td th:text="*{#temporals.format(createdAt, 'yyyy-MM-dd HH:mm:ss')}">2000-01-01 00:00:00</td>
+        <td th:text="*{#temporals.format(deadline, 'yyyy-MM-dd')}">2000-01-31</td>
+        <td th:text="*{completed}">false</td>
+    </tr>
+    <!--/*-->
+    <tr>
+        <td>aaaaaaaaaaaaaaaaaaaa</td>
+        <td>書類を作る</td>
+        <td>2000-01-01 00:00:00</td>
+        <td>2000-01-31</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>aaaaaaaaaaaaaaaaaaaa</td>
+        <td>書類を作る</td>
+        <td>2000-01-01 00:00:00</td>
+        <td>2000-01-31</td>
+        <td>false</td>
+    </tr>
+    <!--*/-->
+</table>
+</body>
+</html>

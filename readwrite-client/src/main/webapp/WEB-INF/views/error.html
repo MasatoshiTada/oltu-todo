@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>エラー画面</title>
+    <link rel="stylesheet" href="../../resources/css/style.css"
+          th:href="@{${mvc.contextPath} + '/resources/css/style.css'}">
+</head>
+<body>
+<h1>エラー画面</h1>
+<p th:text="${errorDto.message}">エラーメッセージ</pth:>
+</body>
+</html>

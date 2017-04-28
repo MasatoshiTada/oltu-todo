@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+    <filter>
+        <filter-name>LoggingFilter</filter-name>
+        <filter-class>com.example.resourceserver.web.servletfilter.HttpLoggingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>ExceptionHandlingFilter</filter-name>
+        <filter-class>com.example.resourceserver.web.servletfilter.ExceptionHandlingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ExceptionHandlingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>OAuthFilter</filter-name>
+        <filter-class>org.apache.oltu.oauth2.rsfilter.OAuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OAuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>oauth.rs.provider-class</param-name>
+        <param-value>com.example.resourceserver.oauth.MyOAuthRSProvider</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>oauth.rs.realm</param-name>
+        <param-value>MY REALM</param-value>
+    </context-param>
+
+</web-app>
