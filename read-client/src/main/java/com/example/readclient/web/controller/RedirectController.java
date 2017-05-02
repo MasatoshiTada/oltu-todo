@@ -30,7 +30,7 @@ public class RedirectController {
 
     @GET
     @Controller
-    public String redirect(@Context HttpServletRequest httpServletRequest, @Context UriInfo uriInfo)
+    public String redirect(@Context HttpServletRequest httpServletRequest)
             throws OAuthProblemException, OAuthSystemException {
         // クエリパラメータから認可コードを取得
         String authCode = httpServletRequest.getParameter(OAuth.OAUTH_CODE);

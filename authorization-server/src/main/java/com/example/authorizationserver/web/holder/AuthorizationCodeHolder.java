@@ -1,7 +1,7 @@
 package com.example.authorizationserver.web.holder;
 
-import com.example.authorizationserver.service.user.Client;
-import com.example.authorizationserver.service.user.ResourceOwner;
+import com.example.authorizationserver.oauth.Client;
+import com.example.authorizationserver.oauth.ResourceOwner;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.concurrent.ConcurrentHashMap;

@@ -39,10 +39,9 @@ public class TodoService {
     ObjectMapper objectMapper;
 
     /**
-     * @param username ユーザー名
      * @return ユーザーの全TODO
      */
-    public List<Todo> findAll(String username) throws OAuthSystemException, OAuthProblemException, IOException {
+    public List<Todo> findAll() throws OAuthSystemException, OAuthProblemException, IOException {
         logger.info("リソースサーバーへリクエスト：GET {}", TODO_URL);
 
         Response response = ClientBuilder.newBuilder()

@@ -7,6 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * リソースサーバーへのアクセス時にアクセストークンが必要であるコントローラーメソッドに付加する。
+ * そのコントローラーメソッド実行前に、AccessTokenFilterが実行される。
+ * @see AccessTokenFilter
+ */
 @NameBinding
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

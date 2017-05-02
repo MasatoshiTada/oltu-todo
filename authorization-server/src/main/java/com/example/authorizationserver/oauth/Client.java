@@ -1,4 +1,4 @@
-package com.example.authorizationserver.service.user;
+package com.example.authorizationserver.oauth;
 
 import com.example.authorizationserver.oauth.ScopeType;
 

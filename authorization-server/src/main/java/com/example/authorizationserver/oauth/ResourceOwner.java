@@ -1,7 +1,10 @@
-package com.example.authorizationserver.service.user;
+package com.example.authorizationserver.oauth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * リソースオーナーを表す。
+ */
 public class ResourceOwner {
 
     private String loginId;

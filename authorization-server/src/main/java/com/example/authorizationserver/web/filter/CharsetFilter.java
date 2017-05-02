@@ -10,6 +10,9 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Content-Typeレスポンスヘッダーに「charset=utf-8」を付加する。
+ */
 @Provider
 public class CharsetFilter implements ContainerResponseFilter {
     @Override

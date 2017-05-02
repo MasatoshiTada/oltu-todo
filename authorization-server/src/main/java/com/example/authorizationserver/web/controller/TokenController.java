@@ -1,9 +1,9 @@
 package com.example.authorizationserver.web.controller;
 
 import com.example.authorizationserver.service.ResourceOwnerService;
-import com.example.authorizationserver.service.user.Client;
+import com.example.authorizationserver.oauth.Client;
 import com.example.authorizationserver.web.filter.ClientAuthenticationRequired;
-import com.example.authorizationserver.service.user.ResourceOwner;
+import com.example.authorizationserver.oauth.ResourceOwner;
 import com.example.authorizationserver.service.AccessTokenService;
 import com.example.authorizationserver.web.holder.AuthorizationCodeHolder;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
@@ -68,7 +68,6 @@ public class TokenController {
             validateRedirectionURI(oauthRequest, client);
 
             // 認可コードを削除
-            resourceOwner.setClient(client);
             authorizationCodeHolder.remove(authCode);
 
             // アクセストークンとリフレッシュトークン発行
@@ -78,6 +77,7 @@ public class TokenController {
 
             // アクセストークンとリソースオーナーをホルダーに登録
             logger.info("保存します。アクセストークン = {}、リソースオーナー = {}", accessToken, resourceOwner);
+            resourceOwner.setClient(client);
             accessTokenService.saveAccessTokenAndResourceOwner(accessToken, resourceOwner);
 
             // レスポンスするJSONの作成

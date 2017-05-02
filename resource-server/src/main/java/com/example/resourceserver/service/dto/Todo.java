@@ -19,17 +19,7 @@ public class Todo {
     private Boolean completed;
 
     public Todo() {
-        this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
-        this.completed = false;
-    }
-
-    public Todo(String username, String text, LocalDate deadline) {
-        this.uuid = UUID.randomUUID();
-        this.username = username;
-        this.text = text;
-        this.createdAt = LocalDateTime.now();
-        this.deadline = deadline;
         this.completed = false;
     }
 

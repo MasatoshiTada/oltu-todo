@@ -1,6 +1,6 @@
 package com.example.authorizationserver.service;
 
-import com.example.authorizationserver.service.user.ResourceServer;
+import com.example.authorizationserver.oauth.ResourceServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +8,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.NotAuthorizedException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * 本来はデータベースからリソースサーバー情報を取得する。
+ * （簡略化のためインメモリに保持している）
+ */
 @ApplicationScoped
 public class ResourceServerService {
 

@@ -1,7 +1,6 @@
 package com.example.resourceserver.web.filter;
 
 import com.example.resourceserver.service.user.ResourceOwner;
-import org.apache.oltu.oauth2.common.OAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +16,9 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 
+/**
+ * 現在アクセスしたリソースオーナーの情報を、SecurityContextに保存する
+ */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityContextPersistentFilter implements ContainerRequestFilter {
@@ -30,7 +32,6 @@ public class SecurityContextPersistentFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
         ResourceOwner resourceOwner = (ResourceOwner) httpServletRequest.getAttribute(ResourceOwner.ATTR_NAME);
-        String clientId = (String) httpServletRequest.getAttribute(OAuth.OAUTH_CLIENT_ID);
 
         logger.info("アクセスしたリソースオーナー : {}", resourceOwner);
 
@@ -62,5 +63,6 @@ public class SecurityContextPersistentFilter implements ContainerRequestFilter {
             }
         });
 
+        logger.info("リソースオーナー情報をSecurityContextに保存しました", resourceOwner);
     }
 }

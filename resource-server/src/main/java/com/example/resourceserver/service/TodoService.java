@@ -7,11 +7,15 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * TODOを管理するクラス。
+ * 本来はDBなどに保存するが、簡略化のためインメモリで保持。
+ */
 @ApplicationScoped
 public class TodoService {
 
     /**
-     * 簡略化のためインメモリでTODOを保持する（本来はDBなどに保持する）
+     * 簡略化のためインメモリでTODOを保持する
      */
     private final List<Todo> todoList = new CopyOnWriteArrayList<>();
 

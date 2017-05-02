@@ -1,7 +1,7 @@
 package com.example.authorizationserver.web.filter;
 
 import com.example.authorizationserver.service.ClientService;
-import com.example.authorizationserver.service.user.Client;
+import com.example.authorizationserver.oauth.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * クライアントのBASIC認証を行う
+ * クライアントのBASIC認証を行う。
+ * [at]ClientAuthenticationRequiredが付加されたコントローラーメソッドの直前に実行される。
  */
 @ClientAuthenticationRequired
 @Provider

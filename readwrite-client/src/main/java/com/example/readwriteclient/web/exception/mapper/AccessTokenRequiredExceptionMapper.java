@@ -1,18 +1,23 @@
 package com.example.readwriteclient.web.exception.mapper;
 
-import com.example.readwriteclient.web.controller.AuthorizationController;
+import com.example.readwriteclient.web.constants.Constants;
 import com.example.readwriteclient.web.exception.AccessTokenRequiredException;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.common.OAuth;
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.*;
 import java.net.URI;
 
 /**
- * アクセストークンがなかったら、トークン取得のためのURLにリダイレクトする。
+ * アクセストークンが無かった場合に発生する例外AccessTokenRequiredExceptionを処理する。
+ * 認可サーバーの認可エンドポイントにリダイレクトする。
  */
 @Provider
 public class AccessTokenRequiredExceptionMapper implements javax.ws.rs.ext.ExceptionMapper<AccessTokenRequiredException> {
@@ -25,10 +30,26 @@ public class AccessTokenRequiredExceptionMapper implements javax.ws.rs.ext.Excep
     @Override
     public Response toResponse(AccessTokenRequiredException exception) {
         logger.error(exception.getMessage());
-        URI location = uriInfo.getBaseUriBuilder()
-                .path(AuthorizationController.class)
-                .build();
-        logger.info("{}にリダイレクトします", location);
-        return Response.status(Response.Status.FOUND).location(location).build();
+        try {
+            // 認可サーバーへのリクエストを生成
+            OAuthClientRequest oAuthClientRequest = OAuthClientRequest
+                    .authorizationLocation(Constants.AUTH_ENDPOINT)
+                    .setResponseType(OAuth.OAUTH_CODE)
+                    .setClientId(Constants.CLIENT_ID)
+                    .setRedirectURI(Constants.REDIRECT_URI)
+                    .setState("xyz")
+                    .buildQueryMessage();
+
+            // BASIC認証ヘッダー付加（client_id + client_secret）
+            oAuthClientRequest.addHeader(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE);
+
+            // 認可サーバーの認可エンドポイントへリダイレクト
+            String authorizationEndpointUri = oAuthClientRequest.getLocationUri();
+            logger.info("認可エンドポイントへリダイレクトします。URL = {}", authorizationEndpointUri);
+            return Response.status(Response.Status.FOUND).location(URI.create(authorizationEndpointUri)).build();
+        } catch (OAuthSystemException e) {
+            logger.error("認可エンドポイントへのアクセス中にエラーが発生しました", e);
+            throw new RuntimeException(e);
+        }
     }
 }

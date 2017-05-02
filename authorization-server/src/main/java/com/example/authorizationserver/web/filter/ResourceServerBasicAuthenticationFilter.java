@@ -1,7 +1,7 @@
 package com.example.authorizationserver.web.filter;
 
 import com.example.authorizationserver.service.ResourceServerService;
-import com.example.authorizationserver.service.user.ResourceServer;
+import com.example.authorizationserver.oauth.ResourceServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +18,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * リソースサーバーのBASIC認証を行う。
+ * [at]ResourceServerAuthenticationRequiredが付加されたコントローラーメソッドの直前に実行される。
+ */
 @ResourceServerAuthenticationRequired
 @Provider
 @Priority(Priorities.AUTHENTICATION)

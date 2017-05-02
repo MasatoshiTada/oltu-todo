@@ -1,4 +1,4 @@
-package com.example.authorizationserver.service.user;
+package com.example.authorizationserver.oauth;
 
 /**
  * リソースサーバーを表す。

@@ -1,7 +1,5 @@
 package com.example.readwriteclient.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,14 +19,11 @@ public class Todo {
     private Boolean completed;
 
     public Todo() {
-        this.uuid = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.completed = false;
     }
 
-    public Todo(String username, String text, LocalDate deadline) {
-        this.uuid = UUID.randomUUID();
-        this.username = username;
+    public Todo(String text, LocalDate deadline) {
         this.text = text;
         this.createdAt = LocalDateTime.now();
         this.deadline = deadline;

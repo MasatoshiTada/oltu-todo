@@ -2,8 +2,8 @@ package com.example.authorizationserver.web.controller;
 
 import com.example.authorizationserver.service.ClientService;
 import com.example.authorizationserver.service.ResourceOwnerService;
-import com.example.authorizationserver.service.user.Client;
-import com.example.authorizationserver.service.user.ResourceOwner;
+import com.example.authorizationserver.oauth.Client;
+import com.example.authorizationserver.oauth.ResourceOwner;
 import com.example.authorizationserver.web.holder.AuthorizationCodeHolder;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.Models;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.NotAuthorizedException;
@@ -27,6 +26,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
+/**
+ * 認可画面で「認可」ボタンをクリックされた際にアクセスされる。
+ * 認可コードを発行して、クライアントのリダイレクトエンドポイントにリダイレクトする。
+ */
 @Path("/approval")
 @ApplicationScoped
 public class ApprovalController {
@@ -39,22 +42,20 @@ public class ApprovalController {
     ClientService clientService;
     @Inject
     AuthorizationCodeHolder authorizationCodeHolder;
-    @Inject
-    Models models;
 
     @POST
     public Response approve(@FormParam("loginId") String loginId, @FormParam("password") String password,
                             @FormParam("client_id") String clientId, @Context HttpServletRequest httpServletRequest)
             throws OAuthProblemException, OAuthSystemException {
-        // 認証
+        // リソースオーナーの認証
         ResourceOwner resourceOwner = resourceOwnerService.findByLoginId(loginId);
         if (!resourceOwner.getPassword().equals(password)) {
             logger.error("ログインIDまたはパスワードが違います");
-            throw new NotAuthorizedException("AUTHZ_SERVER");
+            throw new NotAuthorizedException("Basic realm=AUTHZ_SERVER");
         }
-        logger.info("認証に成功しました");
+        logger.info("リソースオーナーの認証に成功しました");
 
-        // 認可コード発行
+        // 認可コードの発行
         OAuthIssuer oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
         String authCode = oAuthIssuer.authorizationCode();
         logger.info("認可コードを発行しました : {}", authCode);
@@ -63,7 +64,7 @@ public class ApprovalController {
         Client client = clientService.getClient(clientId);
         logger.info("クライアント情報 = {}", client);
 
-        // 認可コードとリソースオーナーをホルダーに登録
+        // 認可コードとリソースオーナーをホルダーに保存
         authorizationCodeHolder.addResourceOwner(authCode, resourceOwner);
         authorizationCodeHolder.addClient(authCode, client);
 
@@ -74,8 +75,8 @@ public class ApprovalController {
                 .location(client.getRedirectUri())
                 .buildQueryMessage();
 
-        // redirect_uriにリダイレクト
-        logger.info("redirect_uriにリダイレクトします : {}", oAuthResponse.getLocationUri());
+        // クライアントのリダイレクトエンドポイントにリダイレクト
+        logger.info("クライアントのリダイレクトエンドポイントにリダイレクトします : {}", oAuthResponse.getLocationUri());
         return Response.status(oAuthResponse.getResponseStatus())
                 .location(URI.create(oAuthResponse.getLocationUri())).build();
     }

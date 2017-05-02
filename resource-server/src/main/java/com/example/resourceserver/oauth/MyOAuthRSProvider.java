@@ -1,6 +1,7 @@
 package com.example.resourceserver.oauth;
 
 import com.example.resourceserver.service.user.ResourceOwner;
+import com.example.resourceserver.web.constants.Constants;
 import com.example.resourceserver.web.ssl.SSLContextUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -72,12 +73,10 @@ public class MyOAuthRSProvider implements OAuthRSProvider {
                 .sslContext(SSLContextUtil.getSslContext())
                 .hostnameVerifier((s1, s2) -> true)
                 .build()
-                .target("https://localhost:8888/api/check_token")
+                .target(Constants.CHECK_TOKEN_URI)
                 .request()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-                .header(HttpHeaders.AUTHORIZATION,
-                        "Basic " + Base64.getEncoder().encodeToString(
-                                "resourceserver:password".getBytes(StandardCharsets.UTF_8)))
+                .header(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE)
                 .post(Entity.form(formParams));
 
         logger.info("認可サーバーからのレスポンスコード : {}", response.getStatusInfo());
@@ -86,9 +85,9 @@ public class MyOAuthRSProvider implements OAuthRSProvider {
         if (response.getStatusInfo().equals(Response.Status.OK)) {
             // レスポンスのJSONを受け取る
             String responseJson = response.readEntity(String.class);
-            logger.info("認可サーバーから取得したリソースオーナー情報（デシリアライズ前） : {}", responseJson);
             ResourceOwner resourceOwner = readValue(responseJson);
-            logger.info("認可サーバーから取得したリソースオーナー情報（デシリアライズ後） : {}", resourceOwner);
+            logger.info("認可サーバーから取得したリソースオーナー情報 : {}", resourceOwner);
+
             // リソースオーナー情報をSecurityContextFilterに渡す
             httpServletRequest.setAttribute(ResourceOwner.ATTR_NAME, resourceOwner);
 
@@ -116,6 +115,7 @@ public class MyOAuthRSProvider implements OAuthRSProvider {
                 }
             };
         } else {
+            // アクセストークンが正当でない場合（認可サーバーから200以外のレスポンスが返ってきた場合）
             logger.error("アクセストークンが正当ではありません : {}", accessToken);
             throw OAuthProblemException.error("access_denied");
         }

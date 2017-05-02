@@ -1,8 +1,10 @@
-package com.example.resourceserver.web.resource;
+package com.example.resourceserver.web.controller;
 
 import com.example.resourceserver.oauth.ScopeType;
 import com.example.resourceserver.service.TodoService;
 import com.example.resourceserver.service.dto.Todo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -18,12 +20,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
+/**
+ * TODOを管理するコントローラークラス。
+ */
 @Path("/todos")
 @ApplicationScoped
-public class TodoResource {
+public class TodoController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     @Inject
     TodoService todoService;
@@ -46,9 +53,13 @@ public class TodoResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Todo todo) {
+        todo.setUuid(UUID.randomUUID());
         todo.setUsername(securityContext.getUserPrincipal().getName());
+        logger.info("TODOを追加します : {}", todo);
         todoService.add(todo);
-        URI location = uriInfo.getAbsolutePathBuilder().path(todo.getUuid().toString()).build();
+        URI location = uriInfo.getAbsolutePathBuilder()
+                .path(todo.getUuid().toString())
+                .build();
         return Response.created(location).build();
     }
 }

@@ -1,7 +1,7 @@
 package com.example.authorizationserver.web.controller;
 
 import com.example.authorizationserver.service.ClientService;
-import com.example.authorizationserver.service.user.Client;
+import com.example.authorizationserver.oauth.Client;
 import com.example.authorizationserver.web.holder.AuthorizationCodeHolder;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -18,6 +18,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
+/**
+ * 認可エンドポイント。認可画面をレスポンスする。
+ */
 @Path("/authorize")
 @ApplicationScoped
 public class AuthorizationController {

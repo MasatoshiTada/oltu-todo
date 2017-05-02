@@ -35,8 +35,7 @@ public class TodoForm {
     }
 
     public Todo convert() {
-        // FIXME ダミーの名前
-        return new Todo("dummyName", text, deadline);
+        return new Todo(text, deadline);
     }
 
     @Override

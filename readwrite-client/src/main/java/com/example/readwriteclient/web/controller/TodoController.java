@@ -37,7 +37,7 @@ public class TodoController {
     @GET
     @Path("/index")
     public String index() throws Exception {
-        List<Todo> todoList = todoService.findAll("dummyName");
+        List<Todo> todoList = todoService.findAll();
         models.put("todoList", todoList);
         return "index.html";
     }

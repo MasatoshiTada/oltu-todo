@@ -1,6 +1,6 @@
 package com.example.authorizationserver.service;
 
-import com.example.authorizationserver.service.user.ResourceOwner;
+import com.example.authorizationserver.oauth.ResourceOwner;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.concurrent.ConcurrentHashMap;

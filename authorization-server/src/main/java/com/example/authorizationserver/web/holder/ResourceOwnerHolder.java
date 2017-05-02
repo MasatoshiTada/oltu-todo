@@ -1,6 +1,6 @@
 package com.example.authorizationserver.web.holder;
 
-import com.example.authorizationserver.service.user.ResourceOwner;
+import com.example.authorizationserver.oauth.ResourceOwner;
 
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;

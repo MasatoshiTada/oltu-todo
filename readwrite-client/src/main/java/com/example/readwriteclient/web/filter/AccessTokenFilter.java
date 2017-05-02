@@ -12,6 +12,13 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
+/**
+ * [at]AccessTokenRequiredアノテーションが付加されたコントローラーメソッドの直前に実行される。
+ * アクセストークンの有無を判定し、無ければ例外を発生させる。
+ * @see AccessTokenRequired
+ * @see AccessTokenRequiredException
+ * @see com.example.readwriteclient.web.exception.mapper.AccessTokenRequiredExceptionMapper
+ */
 @AccessTokenRequired
 @Provider
 @ApplicationScoped
