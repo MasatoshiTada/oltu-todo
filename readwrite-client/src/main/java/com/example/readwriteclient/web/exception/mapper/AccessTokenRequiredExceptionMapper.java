@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.*;
@@ -39,9 +38,6 @@ public class AccessTokenRequiredExceptionMapper implements javax.ws.rs.ext.Excep
                     .setRedirectURI(Constants.REDIRECT_URI)
                     .setState("xyz")
                     .buildQueryMessage();
-
-            // BASIC認証ヘッダー付加（client_id + client_secret）
-            oAuthClientRequest.addHeader(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE);
 
             // 認可サーバーの認可エンドポイントへリダイレクト
             String authorizationEndpointUri = oAuthClientRequest.getLocationUri();

@@ -31,7 +31,7 @@ public class AccessTokenFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        // アクセストークンを持ってなかったらリダイレクト
+        // アクセストークンを持ってなかったら例外発生
         if (!accessTokenHolder.isValidToken()) {
             logger.error("アクセストークンがありません");
             throw new AccessTokenRequiredException("アクセストークンがありません");

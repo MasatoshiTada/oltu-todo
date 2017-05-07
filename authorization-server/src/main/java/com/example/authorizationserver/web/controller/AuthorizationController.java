@@ -2,7 +2,6 @@ package com.example.authorizationserver.web.controller;
 
 import com.example.authorizationserver.service.ClientService;
 import com.example.authorizationserver.oauth.Client;
-import com.example.authorizationserver.web.holder.AuthorizationCodeHolder;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -28,8 +27,6 @@ public class AuthorizationController {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
     @Inject
-    AuthorizationCodeHolder authorizationCodeHolder;
-    @Inject
     ClientService clientService;
     @Inject
     Models models;
@@ -44,9 +41,9 @@ public class AuthorizationController {
         Client client = clientService.getClient(clientId);
         // redirect_uriの正当性をチェック
         validateRedirectionURI(oAuthRequest, client);
-        // approval画面へフォワード
+        // 認可画面へフォワード
         models.put("client", client);
-        logger.info("approval画面に遷移します");
+        logger.info("認可画面に遷移します");
         return "approval.html";
     }
 

@@ -70,8 +70,8 @@ public class MyOAuthRSProvider implements OAuthRSProvider {
         MultivaluedHashMap<String, String> formParams = new MultivaluedHashMap<>();
         formParams.putSingle("access_token", accessToken);
         Response response = ClientBuilder.newBuilder()
-                .sslContext(SSLContextUtil.getSslContext())
-                .hostnameVerifier((s1, s2) -> true)
+                .sslContext(SSLContextUtil.getSslContext()) // 自己証明書対策（本番では使わないでください）
+                .hostnameVerifier((s1, s2) -> true) // 自己証明書対策（本番では使わないでください）
                 .build()
                 .target(Constants.CHECK_TOKEN_URI)
                 .request()
