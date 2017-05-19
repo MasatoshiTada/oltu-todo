@@ -76,7 +76,7 @@ public class MyOAuthRSProvider implements OAuthRSProvider {
                 .target(Constants.CHECK_TOKEN_URI)
                 .request()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
-                .header(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE) // BASIC認証ヘッダーを付加
                 .post(Entity.form(formParams));
 
         logger.info("認可サーバーからのレスポンスコード : {}", response.getStatusInfo());

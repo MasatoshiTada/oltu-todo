@@ -47,6 +47,7 @@ public class RedirectController {
                 .setCode(authCode)
                 .setGrantType(GrantType.AUTHORIZATION_CODE)
                 .buildBodyMessage();
+        // BASIC認証ヘッダーを付加
         oAuthClientRequest.addHeader(HttpHeaders.AUTHORIZATION, Constants.AUTH_HEADER_VALUE);
 
         // トークンエンドポイントにリクエストして、アクセストークンを取得

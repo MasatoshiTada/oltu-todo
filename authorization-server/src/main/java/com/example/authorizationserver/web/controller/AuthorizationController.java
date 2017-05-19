@@ -43,6 +43,7 @@ public class AuthorizationController {
         validateRedirectionURI(oAuthRequest, client);
         // 認可画面へフォワード
         models.put("client", client);
+        models.put("state", oAuthRequest.getState());
         logger.info("認可画面に遷移します");
         return "approval.html";
     }

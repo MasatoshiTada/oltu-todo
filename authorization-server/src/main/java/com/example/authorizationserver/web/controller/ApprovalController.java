@@ -9,6 +9,7 @@ import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
+import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
@@ -45,7 +46,8 @@ public class ApprovalController {
 
     @POST
     public Response approve(@FormParam("loginId") String loginId, @FormParam("password") String password,
-                            @FormParam("client_id") String clientId, @Context HttpServletRequest httpServletRequest)
+                            @FormParam("client_id") String clientId, @FormParam("state") String state,
+                            @Context HttpServletRequest httpServletRequest)
             throws OAuthProblemException, OAuthSystemException {
         // リソースオーナーの認証
         ResourceOwner resourceOwner = resourceOwnerService.findByLoginId(loginId);
@@ -72,6 +74,7 @@ public class ApprovalController {
         OAuthResponse oAuthResponse = OAuthASResponse
                 .authorizationResponse(httpServletRequest, Response.Status.FOUND.getStatusCode())
                 .setCode(authCode)
+                .setParam(OAuth.OAUTH_STATE, state)
                 .location(client.getRedirectUri())
                 .buildQueryMessage();
 

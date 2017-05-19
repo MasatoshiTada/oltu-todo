@@ -20,6 +20,7 @@
     ログインID：<input type="text" name="loginId"><br>
     パスワード：<input type="password" name="password"><br>
     <input type="hidden" name="client_id" th:value="${client.clientId}">
+    <input type="hidden" name="state" th:value="${state}">
     <input type="submit" value="認可する">
 </form>
 </body>
