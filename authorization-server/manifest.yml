@@ -1,0 +1,6 @@
+applications:
+- name: auth-server-tada
+  buildpack: java_buildpack
+  command: '.java-buildpack/open_jdk_jre/bin/java -jar app.jar'
+  path: target/ROOT.jar
+  random-route: false

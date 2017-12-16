@@ -33,7 +33,7 @@ public class TodoService {
     @Inject
     SSLContext sslContext;
 
-    private static final String TODO_URL = "https://localhost:8070/api/v1/todos";
+    private static final String TODO_URL = "https://resource-server-tada.cfapps.io/api/v1/todos";
 
     @Inject
     ObjectMapper objectMapper;

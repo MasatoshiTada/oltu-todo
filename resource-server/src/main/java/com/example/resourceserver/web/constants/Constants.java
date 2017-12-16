@@ -12,7 +12,7 @@ public class Constants {
             "Basic " + Base64.getEncoder().encodeToString(
                     (RESOURCE_SERVER_ID + ":" + RESOURCE_SERVER_PASSWORD).getBytes(StandardCharsets.UTF_8));
 
-    public static final String CHECK_TOKEN_URI = "https://localhost:8888/api/check_token";
+    public static final String CHECK_TOKEN_URI = "https://auth-server-tada.cfapps.io/api/check_token";
 
 
 }

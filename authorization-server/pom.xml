@@ -14,6 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <payara-micro.version>4.1.2.174</payara-micro.version>
     </properties>
 
     <dependencyManagement>
@@ -29,6 +30,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>fish.payara.extras</groupId>
+            <artifactId>payara-micro</artifactId>
+            <version>${payara-micro.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -94,6 +101,36 @@
 
     <build>
         <finalName>ROOT</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <echo message="Build uber jar"/>
+                                <java fork="true"
+                                      jar="${settings.localRepository}/fish/payara/extras/payara-micro/${payara-micro.version}/payara-micro-${payara-micro.version}.jar">
+                                    <arg value="--deploy"/>
+                                    <arg value="${basedir}/target/${build.finalName}.war"/>
+                                    <arg value="--outputUberJar"/>
+                                    <arg value="${basedir}/target/${build.finalName}.jar"/>
+                                </java>
+                                <echo message="Add .profile into uber jar"/>
+                                <jar update="true" destfile="${basedir}/target/${build.finalName}.jar">
+                                    <fileset dir="${basedir}" includes=".profile"/>
+                                </jar>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

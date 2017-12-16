@@ -20,8 +20,8 @@ public class ClientService {
     private static final CopyOnWriteArrayList<Client> CLIENTS = new CopyOnWriteArrayList<>();
 
     static {
-        CLIENTS.add(new Client("readclient", "password", "https://localhost:8080/api/redirect", ScopeType.READ));
-        CLIENTS.add(new Client("readwriteclient", "password", "https://localhost:8081/api/redirect", ScopeType.READ, ScopeType.WRITE));
+        CLIENTS.add(new Client("readclient", "password", "https://read-client-tada.cfapps.io/api/redirect", ScopeType.READ));
+        CLIENTS.add(new Client("readwriteclient", "password", "https://readwrite-client-tada.cfapps.io/api/redirect", ScopeType.READ, ScopeType.WRITE));
     }
 
     public Client getClient(String clientId) {
